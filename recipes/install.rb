@@ -90,6 +90,7 @@ end
 
 group node['hops']['secure_group'] do
   action :create
+  gid node['secure_group']['gid']
   not_if { node['install']['external_users'].casecmp("true") == 0 }
 end
 
@@ -122,6 +123,7 @@ user node['hops']['mr']['user'] do
   shell "/bin/bash"
   manage_home true
   action :create
+  uid node['mr']['uid']
   not_if "getent passwd #{node['hops']['mr']['user']}"
   not_if { node['install']['external_users'].casecmp("true") == 0 }
 end
@@ -132,7 +134,7 @@ end
 # yarnapp doesn't own anything on the fs (at least not in /srv/hops)
 # so it's safe to remove and re-create the user
 user node['hops']['yarnapp']['user'] do
-  uid node['hops']['yarnapp']['uid']
+  uid node['yarnapp']['uid']
   gid node['hops']['group']
   system true
   manage_home true
@@ -147,6 +149,7 @@ user node['hops']['rm']['user'] do
   system true
   shell "/bin/bash"
   action :create
+  uid node['rm']['uid']
   manage_home true
   not_if "getent passwd #{node['hops']['rm']['user']}"
   not_if { node['install']['external_users'].casecmp("true") == 0 }
